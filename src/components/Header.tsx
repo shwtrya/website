@@ -1,14 +1,12 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, FileText } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
-import ResumeModal from './ResumeModal';
 import { useActiveSection } from '../hooks/useActiveSection';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [isResumeModalOpen, setIsResumeModalOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const activeSection = useActiveSection();
@@ -23,10 +21,8 @@ export const Header: React.FC = () => {
   ];
 
   const scrollToSection = (href: string, route: string) => {
-    // If we're not on the home page, navigate to home first
     if (location.pathname !== '/') {
       navigate('/');
-      // Wait for navigation to complete, then scroll
       setTimeout(() => {
         const element = document.querySelector(href);
         if (element) {
@@ -34,7 +30,6 @@ export const Header: React.FC = () => {
         }
       }, 100);
     } else {
-      // We're on home page, just scroll
       const element = document.querySelector(href);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -67,42 +62,29 @@ export const Header: React.FC = () => {
                 key={item.name}
                 onClick={() => scrollToSection(item.href, item.route)}
                 className={`px-3 py-2 text-sm font-medium transition-colors relative ${
-                  (location.pathname === '/' && activeSection === item.id) || 
+                  (location.pathname === '/' && activeSection === item.id) ||
                   (location.pathname === item.route && item.route !== '/')
                     ? 'text-blue-600 dark:text-blue-400'
                     : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
                 }`}
               >
                 {item.name}
-                {((location.pathname === '/' && activeSection === item.id) || 
+                {((location.pathname === '/' && activeSection === item.id) ||
                   (location.pathname === item.route && item.route !== '/')) && (
                   <motion.div
                     layoutId="activeSection"
                     className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400"
                     initial={false}
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
               </button>
             ))}
           </nav>
 
-          {/* View Resume, Theme Toggle and Mobile Menu Button */}
+          {/* Theme Toggle & Mobile Menu Button */}
           <div className="flex items-center space-x-4">
-            {/* View Resume Button - Desktop */}
-            <motion.button
-              onClick={() => setIsResumeModalOpen(true)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="hidden md:flex items-center space-x-2 bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 shadow-sm hover:shadow-md"
-            >
-              <FileText size={16} />
-              <span>View Resume/CV</span>
-            </motion.button>
-            
             <ThemeToggle />
-            
-            {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -121,7 +103,7 @@ export const Header: React.FC = () => {
                   key={item.name}
                   onClick={() => scrollToSection(item.href, item.route)}
                   className={`block w-full text-left px-3 py-2 text-base font-medium rounded-md transition-colors ${
-                    (location.pathname === '/' && activeSection === item.id) || 
+                    (location.pathname === '/' && activeSection === item.id) ||
                     (location.pathname === item.route && item.route !== '/')
                       ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
                       : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
@@ -130,27 +112,9 @@ export const Header: React.FC = () => {
                   {item.name}
                 </button>
               ))}
-              
-              {/* Mobile View Resume Button */}
-              <button
-                onClick={() => {
-                  setIsResumeModalOpen(true);
-                  setIsMenuOpen(false);
-                }}
-                className="flex items-center space-x-2 w-full text-left px-3 py-2 text-base font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-800/30 rounded-md transition-colors border border-blue-200 dark:border-blue-800"
-              >
-                <FileText size={18} />
-                <span>View Resume/CV</span>
-              </button>
             </div>
           </div>
         )}
-        
-        {/* Resume Modal */}
-        <ResumeModal 
-          isOpen={isResumeModalOpen} 
-          onClose={() => setIsResumeModalOpen(false)} 
-        />
       </div>
     </header>
   );
