@@ -118,6 +118,35 @@ a:focus-visible {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Modal backdrop blur */
+.modal-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Smooth modal animations */
+.modal-enter {
+  opacity: 0;
+  transform: scale(0.8) translateY(50px);
+}
+
+.modal-enter-active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-exit {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.modal-exit-active {
+  opacity: 0;
+  transform: scale(0.8) translateY(50px);
+  transition: all 0.2s ease-in-out;
+}
+
 /* Custom animations */
 @keyframes float {
   0%, 100% {
@@ -375,6 +404,29 @@ img[loading="lazy"]:not([src]) {
   }
 }
 
+/* PDF viewer improvements */
+iframe[src*=".pdf"] {
+  border: none;
+  background: white;
+}
+
+.dark iframe[src*=".pdf"] {
+  filter: invert(0.9) hue-rotate(180deg);
+}
+
+/* Mobile PDF fallback styling */
+@media (max-width: 768px) {
+  .pdf-fallback {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  
+  .dark .pdf-fallback {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -384,6 +436,12 @@ img[loading="lazy"]:not([src]) {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  
+  /* Keep modal transitions smooth even in reduced motion */
+  .modal-enter-active,
+  .modal-exit-active {
+    transition-duration: 0.15s !important;
   }
 }
 

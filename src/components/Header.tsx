@@ -1,20 +1,25 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, FileText } from 'lucide-react';
+import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
+import ResumeModal from './ResumeModal';
+import { useActiveSection } from '../hooks/useActiveSection';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isResumeModalOpen, setIsResumeModalOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const activeSection = useActiveSection();
 
   const navItems = [
-    { name: 'Home', href: '#home', route: '/' },
-    { name: 'About', href: '#about', route: '/about' },
-    { name: 'Experience', href: '#experience', route: '/experience' },
-    { name: 'Projects', href: '#projects', route: '/projects' },
-    { name: 'Education', href: '#education', route: '/education' },
-    { name: 'Contact', href: '#contact', route: '/contact' },
+    { name: 'Home', href: '#home', route: '/', id: 'home' },
+    { name: 'About', href: '#about', route: '/about', id: 'about' },
+    { name: 'Experience', href: '#experience', route: '/experience', id: 'experience' },
+    { name: 'Projects', href: '#projects', route: '/projects', id: 'projects' },
+    { name: 'Education', href: '#education', route: '/education', id: 'education' },
+    { name: 'Contact', href: '#contact', route: '/contact', id: 'contact' },
   ];
 
   const scrollToSection = (href: string, route: string) => {
@@ -61,15 +66,40 @@ export const Header: React.FC = () => {
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href, item.route)}
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
+                className={`px-3 py-2 text-sm font-medium transition-colors relative ${
+                  (location.pathname === '/' && activeSection === item.id) || 
+                  (location.pathname === item.route && item.route !== '/')
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                }`}
               >
                 {item.name}
+                {((location.pathname === '/' && activeSection === item.id) || 
+                  (location.pathname === item.route && item.route !== '/')) && (
+                  <motion.div
+                    layoutId="activeSection"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400"
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
               </button>
             ))}
           </nav>
 
           {/* Theme Toggle and Mobile Menu Button */}
           <div className="flex items-center space-x-4">
+            {/* Resume Button */}
+            <motion.button
+              onClick={() => setIsResumeModalOpen(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="hidden md:flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            >
+              <FileText size={16} />
+              <span>Resume</span>
+            </motion.button>
+            
             <ThemeToggle />
             
             {/* Mobile menu button */}
@@ -90,14 +120,37 @@ export const Header: React.FC = () => {
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href, item.route)}
-                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+                  className={`block w-full text-left px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                    (location.pathname === '/' && activeSection === item.id) || 
+                    (location.pathname === item.route && item.route !== '/')
+                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
                 >
                   {item.name}
                 </button>
               ))}
+              
+              {/* Mobile Resume Button */}
+              <button
+                onClick={() => {
+                  setIsResumeModalOpen(true);
+                  setIsMenuOpen(false);
+                }}
+                className="flex items-center space-x-2 w-full text-left px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+              >
+                <FileText size={18} />
+                <span>View Resume</span>
+              </button>
             </div>
           </div>
         )}
+        
+        {/* Resume Modal */}
+        <ResumeModal 
+          isOpen={isResumeModalOpen} 
+          onClose={() => setIsResumeModalOpen(false)} 
+        />
       </div>
     </header>
   );
