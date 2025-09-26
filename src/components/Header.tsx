@@ -87,17 +87,17 @@ export const Header: React.FC = () => {
             ))}
           </nav>
 
-          {/* Theme Toggle and Mobile Menu Button */}
+          {/* View Resume, Theme Toggle and Mobile Menu Button */}
           <div className="flex items-center space-x-4">
-            {/* Resume Button */}
+            {/* View Resume Button - Desktop */}
             <motion.button
               onClick={() => setIsResumeModalOpen(true)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="hidden md:flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="hidden md:flex items-center space-x-2 bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 shadow-sm hover:shadow-md"
             >
               <FileText size={16} />
-              <span>Resume</span>
+              <span>View Resume/CV</span>
             </motion.button>
             
             <ThemeToggle />
@@ -131,16 +131,16 @@ export const Header: React.FC = () => {
                 </button>
               ))}
               
-              {/* Mobile Resume Button */}
+              {/* Mobile View Resume Button */}
               <button
                 onClick={() => {
                   setIsResumeModalOpen(true);
                   setIsMenuOpen(false);
                 }}
-                className="flex items-center space-x-2 w-full text-left px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+                className="flex items-center space-x-2 w-full text-left px-3 py-2 text-base font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-800/30 rounded-md transition-colors border border-blue-200 dark:border-blue-800"
               >
                 <FileText size={18} />
-                <span>View Resume</span>
+                <span>View Resume/CV</span>
               </button>
             </div>
           </div>
