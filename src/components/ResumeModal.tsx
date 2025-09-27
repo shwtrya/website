@@ -65,7 +65,7 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
             damping: 25,
             duration: 0.3 
           }}
-          className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-5xl w-full max-h-[95vh] overflow-hidden border border-gray-200 dark:border-gray-700"
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] mt-20 overflow-hidden border border-gray-200 dark:border-gray-700"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -109,7 +109,7 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* Content */}
-          <div className="overflow-y-auto max-h-[calc(95vh-120px)]">
+          <div className="overflow-y-auto max-h-[calc(90vh-140px)]">
             {/* Contact Information Cards */}
             <div className="p-6 bg-gray-50 dark:bg-gray-900/50">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Shield, Clock } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +12,12 @@ const Contact = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [lastSubmitTime, setLastSubmitTime] = useState<number>(0);
+  const [submitCount, setSubmitCount] = useState<number>(0);
+
+  // Anti-spam protection
+  const COOLDOWN_TIME = 60000; // 1 menit
+  const MAX_SUBMISSIONS_PER_HOUR = 3;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -22,12 +28,53 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Anti-spam checks
+    const now = Date.now();
+    const timeSinceLastSubmit = now - lastSubmitTime;
+    
+    // Check cooldown
+    if (timeSinceLastSubmit < COOLDOWN_TIME) {
+      setSubmitStatus('error');
+      return;
+    }
+    
+    // Check hourly limit
+    const hourlySubmissions = parseInt(localStorage.getItem('hourlySubmissions') || '0');
+    const lastHourReset = parseInt(localStorage.getItem('lastHourReset') || '0');
+    
+    if (now - lastHourReset > 3600000) { // Reset setiap jam
+      localStorage.setItem('hourlySubmissions', '0');
+      localStorage.setItem('lastHourReset', now.toString());
+    } else if (hourlySubmissions >= MAX_SUBMISSIONS_PER_HOUR) {
+      setSubmitStatus('error');
+      return;
+    }
+    
     setIsSubmitting(true);
     setSubmitStatus('idle');
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Form submitted:', formData);
+      // Buat mailto URL dengan data form
+      const subject = encodeURIComponent(`Portfolio Contact: ${formData.subject}`);
+      const body = encodeURIComponent(
+        `Nama: ${formData.name}\n` +
+        `Email: ${formData.email}\n` +
+        `Subjek: ${formData.subject}\n\n` +
+        `Pesan:\n${formData.message}\n\n` +
+        `---\n` +
+        `Dikirim dari Portfolio Website pada ${new Date().toLocaleString('id-ID')}`
+      );
+      
+      const mailtoUrl = `mailto:shawavatritya@gmail.com?subject=${subject}&body=${body}`;
+      
+      // Buka aplikasi email default
+      window.location.href = mailtoUrl;
+      
+      // Update anti-spam counters
+      setLastSubmitTime(now);
+      const newHourlyCount = hourlySubmissions + 1;
+      localStorage.setItem('hourlySubmissions', newHourlyCount.toString());
       
       setSubmitStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
@@ -38,6 +85,21 @@ const Contact = () => {
     }
   };
 
+  // Check if user can submit
+  const canSubmit = () => {
+    const now = Date.now();
+    const timeSinceLastSubmit = now - lastSubmitTime;
+    const hourlySubmissions = parseInt(localStorage.getItem('hourlySubmissions') || '0');
+    
+    return timeSinceLastSubmit >= COOLDOWN_TIME && hourlySubmissions < MAX_SUBMISSIONS_PER_HOUR;
+  };
+
+  const getRemainingCooldown = () => {
+    const now = Date.now();
+    const timeSinceLastSubmit = now - lastSubmitTime;
+    const remaining = Math.ceil((COOLDOWN_TIME - timeSinceLastSubmit) / 1000);
+    return remaining > 0 ? remaining : 0;
+  };
   const contactInfo = [
     {
       icon: Mail,
@@ -146,9 +208,13 @@ const Contact = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
+                  className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start space-x-3"
                 >
-                  <p className="text-green-800 dark:text-green-300 text-sm">Terima kasih! Pesan Anda telah berhasil dikirim.</p>
+                  <Mail className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-green-800 dark:text-green-300 text-sm font-medium">Email berhasil dibuka!</p>
+                    <p className="text-green-700 dark:text-green-400 text-xs mt-1">Aplikasi email Anda akan terbuka dengan pesan yang sudah terisi. Silakan kirim email tersebut.</p>
+                  </div>
                 </motion.div>
               )}
               
@@ -156,11 +222,30 @@ const Contact = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
+                  className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start space-x-3"
                 >
-                  <p className="text-red-800 dark:text-red-300 text-sm">Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi.</p>
+                  <Shield className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-red-800 dark:text-red-300 text-sm font-medium">Terlalu cepat!</p>
+                    <p className="text-red-700 dark:text-red-400 text-xs mt-1">
+                      Untuk mencegah spam, harap tunggu {getRemainingCooldown()} detik sebelum mengirim pesan lagi.
+                    </p>
+                  </div>
                 </motion.div>
               )}
+
+              {/* Anti-spam info */}
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <div className="flex items-start space-x-3">
+                  <Shield className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-blue-800 dark:text-blue-300 text-xs font-medium">Proteksi Anti-Spam Aktif</p>
+                    <p className="text-blue-700 dark:text-blue-400 text-xs mt-1">
+                      Maksimal 3 pesan per jam • Cooldown 1 menit antar pesan
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
 
               {/* FORM FIELDS */}
               <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
@@ -236,11 +321,24 @@ const Contact = () => {
                 type="submit"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                disabled={isSubmitting}
-                className="w-full bg-blue-600 dark:bg-blue-500 text-white py-2 sm:py-3 px-6 rounded-lg text-sm sm:text-base font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                disabled={isSubmitting || !canSubmit()}
+                className={`w-full py-2 sm:py-3 px-6 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 flex items-center justify-center space-x-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+                  canSubmit() && !isSubmitting
+                    ? 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 hover:scale-102'
+                    : 'bg-gray-400 dark:bg-gray-600 text-gray-200 cursor-not-allowed opacity-60'
+                }`}
               >
-                <Send size={18} className="sm:w-5 sm:h-5" />
-                <span>{isSubmitting ? 'Mengirim...' : 'Kirim Pesan'}</span>
+                {!canSubmit() ? (
+                  <>
+                    <Clock size={18} className="sm:w-5 sm:h-5" />
+                    <span>Tunggu {getRemainingCooldown()}s</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} className="sm:w-5 sm:h-5" />
+                    <span>{isSubmitting ? 'Membuka Email...' : 'Kirim Pesan'}</span>
+                  </>
+                )}
               </motion.button>
             </form>
           </motion.div>
