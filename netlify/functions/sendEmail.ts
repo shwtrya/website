@@ -40,7 +40,7 @@ export const handler: Handler = async (event) => {
 
     const result = await resend.emails.send({
       from: 'Portfolio Contact <onboarding@resend.dev>',
-      to: 'shawavatritya@gmail.com',
+      to: 'shawavatritya@outlook.co.id',
       reply_to: email,
       subject: `Portfolio Contact: ${subject}`,
       text,
