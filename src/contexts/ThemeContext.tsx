@@ -28,15 +28,20 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     const root = window.document.documentElement;
-    
-    // Remove previous theme class
+
+    root.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+
     root.classList.remove('light', 'dark');
-    
-    // Add current theme class
+
     root.classList.add(theme);
-    
-    // Save to localStorage
+
     localStorage.setItem('theme', theme);
+
+    const timer = setTimeout(() => {
+      root.style.transition = '';
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [theme]);
 
   const toggleTheme = () => {

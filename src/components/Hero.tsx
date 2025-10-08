@@ -127,35 +127,35 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="flex justify-center space-x-4 sm:space-x-6 px-4"
+            className="flex justify-center items-center space-x-4 sm:space-x-6 px-4"
           >
             <motion.a
               href="https://github.com/CyXd404"
               whileHover={{ scale: 1.1, y: -2 }}
-              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 flex items-center justify-center"
               aria-label="Visit GitHub profile"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Github size={20} className="sm:w-6 sm:h-6" />
+              <Github className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.a>
             <motion.a
               href="https://www.linkedin.com/in/shawava-tritya"
               whileHover={{ scale: 1.1, y: -2 }}
-              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 flex items-center justify-center"
               aria-label="Visit LinkedIn profile"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Linkedin size={20} className="sm:w-6 sm:h-6" />
+              <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.a>
             <motion.a
               href="mailto:shawavatritya@gmail.com"
               whileHover={{ scale: 1.1, y: -2 }}
-              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 flex items-center justify-center"
               aria-label="Send email"
             >
-              <Mail size={20} className="sm:w-6 sm:h-6" />
+              <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.a>
           </motion.div>
         </div>
