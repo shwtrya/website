@@ -20,6 +20,7 @@ const Projects = lazy(() => import('./components/Projects'));
 const Education = lazy(() => import('./components/Education'));
 const Contact = lazy(() => import('./components/Contact'));
 const NotFound = lazy(() => import('./components/NotFound'));
+const SkillsSandbox = lazy(() => import('./components/SkillsSandbox'));
 
 function AppContent() {
   useKeyboardShortcuts();
@@ -71,6 +72,7 @@ function HomePage() {
       <Experience />
       <Timeline />
       <Projects />
+      <SkillsSandbox />
       <Education />
       <Contact />
     </motion.div>

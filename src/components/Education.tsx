@@ -22,20 +22,26 @@ const Education = () => {
 
   const certifications = [
     {
-      name: 'Hard Skills',
-      issuer: 'Data Entry · Produksi · Arduino & IoT · Instalasi Jaringan',
+      name: 'Technical Skills',
+      issuer: 'Arduino & IoT · Network Installation · Mikrotik · Data Entry',
+      date: '',
+      credentialId: ''
+    },
+    {
+      name: 'Development',
+      issuer: 'HTML · CSS · JavaScript · React · TypeScript · Tailwind CSS',
+      date: '',
+      credentialId: ''
+    },
+    {
+      name: 'Tools & Platforms',
+      issuer: 'Git · GitHub · VS Code · Netlify · Supabase · Microsoft Office',
       date: '',
       credentialId: ''
     },
     {
       name: 'Soft Skills',
-      issuer: 'Teliti · Disiplin · Komunikasi · Kerja Tim',
-      date: '',
-      credentialId: ''
-    },
-    {
-      name: 'Software & Tools',
-      issuer: 'Microsoft Office (Word, Excel, PowerPoint)',
+      issuer: 'Problem Solving · Team Work · Communication · Time Management',
       date: '',
       credentialId: ''
     }

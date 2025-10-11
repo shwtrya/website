@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Github, Linkedin, Mail, User, Briefcase, FolderOpen, GraduationCap, MessageCircle, FileText } from 'lucide-react';
 import { useGreeting } from '../hooks/useGreeting';
@@ -8,7 +8,34 @@ import ResumeModal from './ResumeModal';
 const Hero = () => {
   const greeting = useGreeting();
   const [isResumeModalOpen, setIsResumeModalOpen] = React.useState(false);
+  const [personalizedGreeting, setPersonalizedGreeting] = useState<string | null>(null);
+  const location = useLocation();
   
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const from = params.get('from');
+
+    if (from) {
+      const companyGreetings: { [key: string]: string } = {
+        'google': 'Halo tim Google! Senang Anda berkunjung. Berikut adalah bagaimana saya dapat berkontribusi untuk Google.',
+        'microsoft': 'Halo tim Microsoft! Terima kasih telah mengunjungi portofolio saya. Mari kita explore bagaimana saya bisa berkontribusi.',
+        'meta': 'Halo tim Meta! Excited to share my work with you. Let\'s see how I can add value to Meta.',
+        'tokopedia': 'Halo tim Tokopedia! Senang bertemu Anda. Saya antusias untuk berkontribusi di ekosistem e-commerce Indonesia.',
+        'gojek': 'Halo tim Gojek! Terima kasih sudah berkunjung. Saya passionate untuk membangun solusi yang impact millions.',
+        'shopee': 'Halo tim Shopee! Excited to showcase my skills for Southeast Asia\'s leading e-commerce platform.',
+        'bukalapak': 'Halo tim Bukalapak! Senang Anda berkunjung. Let\'s build something amazing together.',
+        'traveloka': 'Halo tim Traveloka! Terima kasih telah melihat portofolio saya. Ready to help revolutionize travel tech.',
+      };
+
+      const customGreeting = companyGreetings[from.toLowerCase()];
+      if (customGreeting) {
+        setPersonalizedGreeting(customGreeting);
+      } else {
+        setPersonalizedGreeting(`Halo tim ${from}! Senang Anda berkunjung. Berikut adalah bagaimana saya dapat berkontribusi.`);
+      }
+    }
+  }, [location]);
+
   const navigationFlow = [
     { path: '/about', label: 'About Me', icon: User, description: 'Learn about me' },
     { path: '/experience', label: 'Experience', icon: Briefcase, description: 'My career journey' },
@@ -37,6 +64,21 @@ const Hero = () => {
               Hi, I'm <span className="text-blue-600 dark:text-blue-400">Shawava Tritya</span>
             </h2>
           </motion.div>
+
+          {personalizedGreeting && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="mb-6 px-4"
+            >
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-xl shadow-lg max-w-4xl mx-auto">
+                <p className="text-lg sm:text-xl font-semibold text-center">
+                  {personalizedGreeting}
+                </p>
+              </div>
+            </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -95,7 +137,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.0 }}
-            className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8 sm:mb-12 px-4"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 mb-8 sm:mb-12 px-4 max-w-2xl mx-auto"
           >
             <Link
               to="/projects"

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, Eye } from 'lucide-react';
 import CaseStudy from './CaseStudy';
+import ProjectHotspot from './ProjectHotspot';
 
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
@@ -20,6 +21,40 @@ const Projects = () => {
       tags: ['Arduino', 'IoT', 'Sensors', 'Remote Control'],
       liveLink: 'https://github.com/CyXd404',
       githubLink: 'https://github.com/CyXd404',
+      hotspots: [
+        {
+          id: 'hotspot1',
+          x: 30,
+          y: 40,
+          title: 'Sensor DHT22',
+          description: 'Sensor suhu dan kelembaban dengan akurasi tinggi. Challenge: Mengatasi noise reading dengan averaging dan debouncing.',
+          category: 'tech' as const
+        },
+        {
+          id: 'hotspot2',
+          x: 60,
+          y: 35,
+          title: 'ESP8266 Module',
+          description: 'WiFi connectivity untuk kontrol remote. Response time optimized hingga < 2 detik dengan buffer management.',
+          category: 'tech' as const
+        },
+        {
+          id: 'hotspot3',
+          x: 45,
+          y: 70,
+          title: 'Relay Control',
+          description: 'UI dirancang intuitif dengan toggle switches untuk kontrol lampu yang mudah diakses bahkan di layar kecil.',
+          category: 'design' as const
+        },
+        {
+          id: 'hotspot4',
+          x: 75,
+          y: 60,
+          title: 'Real-time Monitoring',
+          description: 'Dashboard menampilkan data sensor secara real-time dengan auto-refresh setiap 2 detik tanpa reload halaman.',
+          category: 'feature' as const
+        }
+      ],
       caseStudy: {
         title: 'Smart Home Berbasis Arduino Uno',
         description: 'Sistem IoT untuk monitoring dan kontrol perangkat rumah menggunakan Arduino Uno dengan konektivitas WiFi.',
@@ -50,6 +85,32 @@ const Projects = () => {
       tags: ['Network', 'ISP', 'Router', 'Configuration'],
       liveLink: 'https://github.com/CyXd404',
       githubLink: 'https://github.com/CyXd404',
+      hotspots: [
+        {
+          id: 'hotspot5',
+          x: 25,
+          y: 45,
+          title: 'Cable Management',
+          description: 'Implementasi structured cabling standard untuk kemudahan maintenance dan troubleshooting. Penggunaan color coding untuk identifikasi.',
+          category: 'design' as const
+        },
+        {
+          id: 'hotspot6',
+          x: 55,
+          y: 30,
+          title: 'Router Configuration',
+          description: 'Konfigurasi Mikrotik dengan VLAN segmentation untuk isolasi traffic dan QoS untuk prioritas bandwidth.',
+          category: 'tech' as const
+        },
+        {
+          id: 'hotspot7',
+          x: 70,
+          y: 55,
+          title: 'Network Monitoring',
+          description: 'System monitoring 24/7 dengan uptime 99.8%. Alert otomatis jika ada gangguan koneksi.',
+          category: 'feature' as const
+        }
+      ],
       caseStudy: {
         title: 'Instalasi ISP hingga Router',
         description: 'Proyek instalasi dan konfigurasi jaringan ISP dari infrastruktur hingga end-user dengan fokus pada stabilitas dan performa.',
@@ -91,7 +152,7 @@ const Projects = () => {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="space-y-16">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
@@ -99,68 +160,75 @@ const Projects = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group hover:-translate-y-2 border border-gray-100 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700"
             >
-              <div className="relative overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={`Screenshot proyek ${project.title} - ${project.description.substring(0, 100)}...`}
-                  width="600"
-                  height="400"
-                  className="w-full h-40 sm:h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4" role="group" aria-label="Project actions">
-                  <motion.button
-                    onClick={() => openCaseStudy(project)}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-white text-gray-900 p-3 rounded-full hover:bg-gray-100 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                    aria-label={`View case study of ${project.title}`}
-                  >
-                    <Eye size={18} />
-                  </motion.button>
-                  <motion.a
-                    href={project.liveLink}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-white text-gray-900 p-3 rounded-full hover:bg-gray-100 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                    aria-label={`View live demo of ${project.title}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink size={18} />
-                  </motion.a>
-                  <motion.a
-                    href={project.githubLink}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-white text-gray-900 p-3 rounded-full hover:bg-gray-100 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                    aria-label={`View source code of ${project.title}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github size={18} />
-                  </motion.a>
+              <div className="grid lg:grid-cols-2 gap-6 p-6">
+                <div>
+                  <ProjectHotspot
+                    imageUrl={project.image}
+                    imageAlt={`Screenshot proyek ${project.title}`}
+                    hotspots={project.hotspots}
+                  />
                 </div>
-              </div>
-              <div className="p-4 sm:p-6">
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2" role="heading" aria-level="3">{project.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed">{project.description}</p>
-                <div className="flex flex-wrap gap-1 sm:gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 sm:px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium hover:bg-blue-100 dark:hover:bg-blue-800/50 transition-colors duration-200"
+                <div className="flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                      {project.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic mb-4">
+                      💡 Tip: Klik titik-titik pada gambar untuk melihat detail teknis dan keputusan desain
+                    </p>
+                  </div>
+                  <div className="flex space-x-3">
+                    <motion.button
+                      onClick={() => openCaseStudy(project)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 flex items-center justify-center space-x-2 bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                     >
-                      {tag}
-                    </span>
-                  ))}
+                      <Eye size={18} />
+                      <span>Case Study</span>
+                    </motion.button>
+                    <motion.a
+                      href={project.liveLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="p-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    >
+                      <ExternalLink size={18} />
+                    </motion.a>
+                    <motion.a
+                      href={project.githubLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="p-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    >
+                      <Github size={18} />
+                    </motion.a>
+                  </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
+
 
         {/* Case Study Modal */}
         {selectedProject && (
