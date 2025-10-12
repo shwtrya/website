@@ -3,13 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
-import { useActiveSection } from '../hooks/useActiveSection';
+import { useScrollSpy } from '../hooks/useScrollSpy'; // Ganti hook di sini
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const activeSection = useActiveSection();
 
   const navItems = [
     { name: 'Home', href: '#home', route: '/', id: 'home' },
@@ -19,8 +18,11 @@ export const Header: React.FC = () => {
     { name: 'Education', href: '#education', route: '/education', id: 'education' },
     { name: 'Contact', href: '#contact', route: '/contact', id: 'contact' },
   ];
+  
+  const sectionIds = navItems.map(item => item.id);
+  const activeSection = useScrollSpy(sectionIds, 100); // Gunakan hook yang sudah diperbaiki
 
-  const scrollToSection = (href: string, route: string) => {
+  const scrollToSection = (href: string) => {
     if (location.pathname !== '/') {
       navigate('/');
       setTimeout(() => {
