@@ -85,7 +85,8 @@ const Contact: React.FC = () => {
 
     // Reset per jam
     if (now - lastHourReset > 3600000) {
-      localStorage.setItem('hourlySubissions', '0');
+      // PERBAIKAN: Menggunakan key localStorage yang benar
+      localStorage.setItem('hourlySubmissions', '0'); 
       localStorage.setItem('lastHourReset', now.toString());
     } else if (hourlySubmissions >= MAX_SUBMISSIONS_PER_HOUR) {
       setSubmitStatus('error');
